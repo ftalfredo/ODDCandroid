@@ -1,0 +1,706 @@
+head	1.11;
+access;
+symbols;
+locks
+	jalfredo:1.11; strict;
+comment	@# @;
+
+
+1.11
+date	2017.07.31.16.41.58;	author jalfredo;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2017.07.28.22.59.21;	author jalfredo;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2017.07.28.17.52.58;	author jalfredo;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2017.07.27.17.04.05;	author jalfredo;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2017.07.27.16.47.45;	author jalfredo;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2017.07.27.16.31.03;	author jalfredo;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2017.07.25.23.34.09;	author jalfredo;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.07.25.21.27.14;	author jalfredo;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.07.25.18.39.07;	author jalfredo;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.07.25.18.09.14;	author jalfredo;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.07.25.16.52.56;	author jalfredo;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@*** empty log message ***
+@
+text
+@package com.example.jalfredo.oddccallback;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import java.sql.Time;
+import java.util.Arrays;
+import java.util.List;
+
+
+
+import android.util.Log;
+import android.widget.TextView;
+
+import 	java.sql.Timestamp;
+
+
+import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    @@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+// NeuSoft executes these four lines somewhere to attach ODDC callback to NeuSoftClass
+// and NueSoft callback to ODDC
+        final ODDCclass oddc = new ODDCclass();
+        final NeuSoftClass nsc = new NeuSoftClass();
+        nsc.setListener(oddc);
+        oddc.setListener(nsc);
+    }
+
+
+    // ODDC callbacks which NeuSoft invokes to send data to ODDC
+    public interface ODDCinterface {
+        public void onContinuousData(ContinuousData data);
+        public List<String> getContinuousLog();
+        public List<String> getEvenbtLog();
+        public List<String> getOnDemandLog();
+    }
+
+    // NeuSoft callbacks which ODDC invokes to send data to NeuSoft
+    public interface NeuSoftInterface {
+        public void onFLAparam(int param); // TBD
+    }
+
+
+
+// NeuSoft class to which Fujitsu callback interface is attached
+// NeuSoft delivers data to Fujitsu by invoking listener.onContinuousData()
+    public class NeuSoftClass extends Thread implements NeuSoftInterface {
+        private ODDCclass listener;
+
+        public void setListener(ODDCclass listener){
+        this.listener = listener;
+    }
+
+        public void onFLAparam(int param){} // example only at this time, param(s) TBD
+
+        public NeuSoftClass() {}
+
+
+
+        private void someNeuSoftFunctionForSendingData() {
+            // NeuSoft prepares data for transfer somewhere in their code
+
+            // for continuous data and event data
+            // events are identified as ContinuousData.fcwEvent==true or ContinuousData.ldwEvent==true
+            // create data packet and assign values with direct assignment, i.e. cd.longitude = value
+            ContinuousData cd = new ContinuousData();
+            listener.onContinuousData(cd); // invoke callback to send to ODDC
+        }
+    }
+
+
+    // Fujitsu supplied class containing callback functions to receive data from NeuSoft
+    public class ODDCclass extends Thread implements ODDCinterface {
+        private NeuSoftClass listener;
+
+        public void setListener(NeuSoftClass listener){
+            this.listener = listener;
+        }
+
+        public List<String> getContinuousLog(){return Arrays.asList("TBD");}
+        public List<String> getEvenbtLog(){return Arrays.asList("TBD");}
+        public List<String> getOnDemandLog(){return Arrays.asList("TBD");}
+
+        public void onContinuousData(final ContinuousData data){
+            // Fujitsu processing of continuous data received from NeuSoft
+        }
+    }
+
+
+    // Fujitsu supplied class for encapsulating data, testing version shown
+    public class ContinuousData {
+        public int messageID;
+        public String sessionID;
+        public String vehicleID; // VIN
+        public String driverID;
+        public String submitterID;
+
+        public Timestamp gpsTimestamp; // from OS not GPS
+        public float longitude;
+        public float latitude;
+        public float speed;
+        public int speedDetectionType;
+
+        public Timestamp accelerationTimeStamp;
+        public float accelerationX;
+        public float accelerationY;
+        public float accelerationZ;
+
+        public Timestamp gShockTimeStamp;
+        public boolean gShockEvent;
+        //public float gShockEventThreshold; // might be a parameter from FLA
+
+        public Timestamp fcwTimeStamp;
+        public boolean fcwExistFV;
+        public boolean fcwCutIn;
+        public float fcwDistanceToFV;
+        public float fcwRelativeSpeedToFV;
+        public boolean fcwEvent;
+        public float fcwEventThreshold;
+
+        public Timestamp ldwTimeStamp;
+        public float ldwDistanceToLeftLane;
+        public float ldwDistanceToRightLane;
+        public boolean ldwEvent;
+
+        public String mediaURI;
+    }
+}
+@
+
+
+1.10
+log
+@*** empty log message ***
+@
+text
+@d7 1
+d9 2
+a10 2
+import java.util.Timer;
+import java.util.TimerTask;
+d17 1
+a17 4
+//import java.text.SimpleDateFormat;
+///import java.util.Date;
+import android.widget.Button;
+import android.widget.EditText;
+d29 1
+a29 1
+// NeuSoft executes these four lines somewhre to attach ODDC callback to NeuSoftClass
+a34 1
+
+d38 1
+a38 1
+    // ODDC callbacks which NeuSoft calls to send data to ODDC
+d46 1
+a46 1
+    // NeuSoft callbacks which ODDC callbacks to send data to NeuSoft
+d54 1
+a54 1
+// NeuSoft delivers data to Fujitsu by calling listener.onContinuousData()
+d58 4
+d64 3
+a66 3
+        public void setListener(ODDCclass listener){
+            this.listener = listener;
+        }
+d68 1
+a68 1
+        public NeuSoftClass() {
+d71 2
+a72 1
+            // for continuous data
+d74 1
+a74 1
+            ContinuousData cd = new ContinuousData(); // then set all data fields
+a75 3
+
+
+
+a79 2
+
+
+d83 1
+d88 4
+a91 3
+        public List<String> getContinuousLog(){}
+        public List<String> getEvenbtLog(){}
+        public List<String> getOnDemandLog(){}
+d119 1
+a119 1
+        //public float gShockEventThreshold; // might be a parameter
+a135 6
+
+
+
+
+
+
+@
+
+
+1.9
+log
+@*** empty log message ***
+@
+text
+@d5 3
+d14 4
+a17 2
+import java.text.SimpleDateFormat;
+import java.util.Date;
+d23 1
+a23 4
+    TextView cdVal;
+    TextView edVal;
+    Button btnSeqNum;
+    EditText seqNumVal;
+a29 6
+        // for testing only
+        cdVal  = (TextView)findViewById(R.id.cdVal);
+        edVal  = (TextView)findViewById(R.id.edVal);
+        btnSeqNum = (Button)findViewById(R.id.btnSeqNum);
+        seqNumVal = (EditText)findViewById(R.id.seqNumVal);
+
+d31 1
+a31 2
+
+// NeuSoft executes these four lines to attach ODDC callback to NeuSoftClass
+a37 10
+
+        // for testing only
+        btnSeqNum.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                // as if data had come from FLA, send to NeuSoft
+				// can be sent from any origin, GUI or network
+                nsc.onSeqNum(Integer.parseInt(seqNumVal.getText().toString()));
+            }
+        });
+d44 3
+a46 2
+        public void onEventData(EventData data);
+		public String onFetchLog(); // request
+d51 1
+a51 4
+        public void onStart();
+        public void onPause();
+        public void onStop();
+        public void onSeqNum(int seqNum);
+d57 1
+a57 1
+// NeuSoft delivers data to Fujitsu by calling listener.onContinuousData() and listener.onEventData()
+d61 1
+a61 11
+        int cSeqNum = 0; // for testing only
+        int eSeqNum = 0; // for testing only
+        Timer ctimer;   // for testing only
+        Timer etimer;   // for testing only
+
+        public void onStart(){}
+        public void onPause(){}
+        public void onStop(){}
+        public void onSeqNum(int seqNum){
+            cSeqNum = seqNum;
+        }
+d68 1
+a68 3
+            // NeuSoft prepares data for transfer
+            // The Timer is used only to create dummy data for demo
+            int cDataInt = 2000;
+d70 4
+a75 3
+            ctimer = new Timer(); // for testing only
+            ctimer.scheduleAtFixedRate(new TimerTask(){ /* for testing only */
+                public void run(){
+a76 24
+                    // NeuSoft creates data packet
+                    ContinuousData cd = new ContinuousData("ContinuousDataFromNeuSoftClass " + cSeqNum);
+                    // NeuSoft invokes callback
+                    listener.onContinuousData(cd);
+                    String log = listener.onFetchLog();
+
+                    Log.d("ALFREDO","onFetchLog "+log);
+
+                    cSeqNum++; // for testing only
+                }
+            }, 1000,cDataInt);
+
+            etimer = new Timer(); // for testing only
+            etimer.scheduleAtFixedRate(new TimerTask(){ /* for testing only */
+                public void run(){
+
+                    // NeuSoft creates data packet
+                    EventData ed = new EventData("EventDataFromNeuSoftClass " + eSeqNum);
+                    // NeuSoft invokes callback
+                    listener.onEventData(ed);
+
+                    eSeqNum++; // for testing only
+                }
+            }, 1000,5700);
+d90 3
+a92 14
+        public String onFetchLog(){
+            return "ABC";
+        }
+
+        public void onEventData(final EventData data){
+            // Fujitsu processing of event data
+
+            // for testing only
+            edVal.post(new Runnable() {
+                public void run() {
+                    edVal.setText(getTimestamp() + " " +  data.val());
+                }
+            });
+        }
+d94 1
+a94 8
+            // Fujitsu processing of continuous data
+
+            // for testing only
+            cdVal.post(new Runnable() {
+                public void run() {
+                    cdVal.setText(getTimestamp() + " " +  data.val());
+                }
+            });
+d101 33
+a133 10
+        String data; // for testing only
+
+        float longitude;
+        float latitude;
+        int speed;
+        // etc
+        // timestamp FCWTimeStamp;
+        // boolean FCSExistFV;
+        // boolean FCWCutIn;
+        // etc
+d135 2
+a137 6
+        public ContinuousData(String d){
+            // only dummy string used for testing
+            this.data = d;
+        }
+        public String val(){return data;}
+    }
+a138 9
+    // Fujitsu supplied class for encapsulating data, testing version shown
+    public class EventData {
+        String data; // for testing only
+        public EventData(String d){
+            // data members TBD
+            this.data = d;
+        }
+        public String val(){return data;}
+    }
+a142 6
+    // for testing only
+    private static String getTimestamp(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss.SSS" );
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+@
+
+
+1.8
+log
+@*** empty log message ***
+@
+text
+@d7 2
+d13 3
+a15 2
+
+
+d20 2
+d31 3
+d35 5
+a39 3
+// NeuSoft executes these three lines to attach Fujitsu callback to NeuSoftClass
+        ODDCinterface oddc = new ODDCinterface();
+        NeuSoftClass nsc = new NeuSoftClass();
+d41 12
+d56 2
+a57 3
+// defined and visible to both NeuSoft and Fujitsu
+// could include additional functions
+    public interface ODDClistener {
+d60 9
+d72 1
+d75 2
+a76 3
+    public class NeuSoftClass extends Thread {
+        private ODDClistener nslistener;
+
+d81 1
+a81 2
+        Timer etimer;
+
+d83 6
+d90 2
+a91 2
+        public void setListener(ODDClistener listener){
+            this.nslistener = listener;
+d97 1
+d102 1
+a102 1
+            ctimer.scheduleAtFixedRate(new TimerTask(){
+d108 4
+a111 1
+                    nslistener.onContinuousData(cd);
+d115 1
+a115 1
+            }, 1000,2000);
+d118 1
+a118 1
+            etimer.scheduleAtFixedRate(new TimerTask(){
+d124 1
+a124 1
+                    nslistener.onEventData(ed);
+d134 12
+a145 2
+    // Fujitsu supplied class containing callback functions
+    public class ODDCinterface extends Thread implements ODDClistener {
+d168 1
+d173 9
+d184 1
+a184 1
+            // data members TBD
+d199 1
+@
+
+
+1.7
+log
+@*** empty log message ***
+@
+text
+@d48 4
+a51 4
+
+
+        int seqNum = 0;
+        Timer dtimer;
+d61 1
+a63 1
+            // for testing only
+d65 2
+a66 2
+            dtimer = new Timer();
+            dtimer.scheduleAtFixedRate(new TimerTask(){
+d68 4
+a71 1
+                    ContinuousData cd = new ContinuousData("DataFromNeuSoftClass " + seqNum);
+d73 2
+a74 1
+                    seqNum++;
+d77 13
+d99 7
+a110 1
+
+@
+
+
+1.6
+log
+@*** empty log message ***
+@
+text
+@d46 5
+d52 3
+d60 3
+d64 1
+d68 1
+a68 1
+                    ContinuousData cd = new ContinuousData("DataFromNeuSoftClass");
+d70 1
+d85 3
+d90 1
+a90 1
+                    cdVal.append("\n" + getTimestamp() + " " +  data.val());
+d99 1
+a99 3
+        timmestamp
+        longitute
+                latitude
+@
+
+
+1.5
+log
+@*** empty log message ***
+@
+text
+@d83 4
+@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@a4 1
+import android.util.Log;
+a17 1
+
+d64 1
+d80 1
+a80 1
+    // Fujitsu supplied class, testing version shown
+d90 1
+a90 1
+    // Fujitsu supplied class, testing version shown
+@
+
+
+1.3
+log
+@onContinuousData working
+@
+text
+@d25 1
+d27 1
+a27 1
+        //edVal  = (TextView)findViewById(R.id.edVal);
+d29 1
+a29 2
+
+        Log.d("ALFREDO","ODDCcallback MainActivity");
+d36 2
+a37 1
+// visible to both NeuSoft and Fujitsu
+d39 2
+a40 2
+        public void onContinuousData(String data);
+        public void onEventData(String data);
+d43 3
+a45 1
+// classname visible to Fujitsu
+d54 1
+a54 1
+            Log.d("ALFREDO","ODDCcallback NeuSoftClass.CONSTRUCTOR");
+d58 2
+a59 1
+                    nslistener.onContinuousData("DataFromNeuSoftClass");
+a64 7
+    private static String getTimestamp(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss.SSS" );
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+
+d66 1
+d68 5
+a72 3
+        public void onEventData(final String data){}
+        public void onContinuousData(final String data){
+            Log.d("ALFREDO","ODDCinterface "+data);
+d75 1
+a75 1
+                    cdVal.append("\n" + getTimestamp() + " " +  data);
+d81 20
+d103 6
+@
+
+
+1.2
+log
+@renamed ODDCclass to ODDCinterface
+@
+text
+@d8 6
+d16 3
+d25 4
+a32 1
+
+d36 1
+a36 2
+
+    //
+d42 1
+d53 1
+a53 1
+            dtimer.schedule(new TimerTask(){
+d55 1
+a55 1
+                    nslistener.onEventData("EventDataFromNeuSoftClass");
+d57 1
+a57 1
+            }, 1000);
+d61 6
+d70 2
+a71 4
+        public void onContinuousData(String data){
+            ;
+        }
+        public void onEventData(String data){
+d73 5
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d5 3
+d15 6
+d23 3
+d31 1
+a31 1
+    public class NeuSoftClass {
+d33 1
+d37 10
+d49 3
+a51 1
+    public class ODDCclass implements ODDClistener {
+d56 1
+a56 1
+            ;
+@

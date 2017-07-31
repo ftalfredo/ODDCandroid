@@ -1,0 +1,199 @@
+head	1.5;
+access;
+symbols;
+locks
+	jalfredo:1.5; strict;
+comment	@# @;
+
+
+1.5
+date	2017.07.28.22.59.11;	author jalfredo;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2017.07.28.17.52.58;	author jalfredo;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2017.07.25.21.27.14;	author jalfredo;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2017.07.25.18.39.07;	author jalfredo;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2017.07.25.16.52.56;	author jalfredo;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@*** empty log message ***
+@
+text
+@<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+</LinearLayout>
+@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@a10 88
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@@+id/seqNumTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data from FLA"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@@+id/seqNumVal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number" />
+
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START" />
+
+        <Button
+            android:id="@@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PAUSE" />
+
+        <Button
+            android:id="@@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STOP" />
+        <Button
+            android:id="@@+id/btnSeqNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FLA" />
+        </LinearLayout>
+
+
+    <TextView
+        android:id="@@+id/cdTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continuous Data"
+        android:textSize="24sp" />
+    <TextView
+        android:id="@@+id/cdVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@@+id/edTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Data"
+        android:textSize="24sp" />
+    <TextView
+        android:id="@@+id/edVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp" />
+
+
+
+@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@d11 59
+d96 2
+@
+
+
+1.2
+log
+@onContinuousData working
+@
+text
+@d25 13
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 1
+a2 1
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+d5 1
+d8 2
+a9 1
+    tools:context="com.example.jalfredo.oddccallback.MainActivity">
+d11 7
+d19 1
+d22 3
+a24 5
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+d26 1
+a26 1
+</android.support.constraint.ConstraintLayout>
+@
