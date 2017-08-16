@@ -1,1 +1,1 @@
-../app/src/main/java/com/example/jalfredo/oddccallback/MainActivity.java
+../app/src/main/java/client/oddc/fla/com/restclient/MainActivity.java
